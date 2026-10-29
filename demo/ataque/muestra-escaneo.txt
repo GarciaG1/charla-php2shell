@@ -1,0 +1,20 @@
+Muestra ILUSTRATIVA de cómo se ve un escaneo de PHP2Shell desde el lado del
+defensor (sin payload: el cuerpo real va recortado a propósito).
+
+El indicador: un POST multipart que incluye el campo PHP_SESSION_UPLOAD_PROGRESS,
+aunque el sitio no tenga ninguna subida de archivos. Eso es lo que buscas en tu
+WAF, en una captura o en un honeypot.
+
+POST /index.php HTTP/1.1
+Host: victima.ejemplo
+Content-Type: multipart/form-data; boundary=----sonda
+------sonda
+Content-Disposition: form-data; name="PHP_SESSION_UPLOAD_PROGRESS"
+
+sondeo
+------sonda
+Content-Disposition: form-data; name="archivo"; filename="a"
+Content-Type: application/octet-stream
+
+(cuerpo recortado - ilustrativo, sin exploit)
+------sonda--

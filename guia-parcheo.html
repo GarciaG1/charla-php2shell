@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guía de parcheo · PHP2Shell</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=JetBrains+Mono:wght@400;600&family=Sora:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070a14;--panel:#0f1628;--panel2:#0c1222;--line:rgba(255,255,255,.10);--fg:#f1f4fc;--muted:#a9b3cf;--dim:#6b7796;
+  --mag:#ff2e83;--vio:#9a6bff;--cyan:#38e3d6;--amber:#ffc24d;--green:#43e08f;--red:#ff5c72;
+  --fd:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;--fb:"Sora",system-ui,sans-serif;--fm:"JetBrains Mono",Consolas,monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--fg);font-family:var(--fb);line-height:1.6}
+.wrap{max-width:1180px;margin:0 auto;padding:34px 20px 90px;display:grid;grid-template-columns:230px 1fr;gap:40px}
+/* nav */
+nav{position:sticky;top:20px;align-self:start;font-family:var(--fm);font-size:12.5px;max-height:calc(100vh - 40px);overflow:auto}
+nav h4{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin:14px 0 6px}
+nav a{display:block;color:var(--muted);text-decoration:none;padding:3px 8px;border-radius:6px;border-left:2px solid transparent}
+nav a:hover{color:var(--fg);background:rgba(255,255,255,.04)}
+nav a.on{color:var(--fg);border-left-color:var(--mag);background:rgba(255,46,131,.10)}
+/* header */
+.hd h1{font-family:var(--fd);font-size:40px;letter-spacing:-.01em}
+.hd .lead{color:var(--muted);margin-top:10px;max-width:70ch}
+.hd .lead b{color:var(--fg)}
+.srch{margin:20px 0 6px;width:100%;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 14px;color:var(--fg);font-family:var(--fb);font-size:15px}
+/* secciones */
+section{scroll-margin-top:20px;margin-top:40px}
+h2{font-family:var(--fd);font-size:27px;letter-spacing:-.01em;padding-bottom:8px;border-bottom:1px solid var(--line);margin-bottom:6px}
+h2 .n{font-family:var(--fm);font-size:14px;color:var(--mag);margin-right:10px}
+h3{font-family:var(--fd);font-size:20px;margin:22px 0 6px}
+.tag{display:inline-block;font-family:var(--fm);font-size:11px;letter-spacing:.08em;padding:2px 8px;border-radius:999px;margin-left:8px;vertical-align:middle}
+.tag.r{background:rgba(255,92,114,.16);color:var(--red)} .tag.a{background:rgba(255,194,77,.16);color:var(--amber)} .tag.g{background:rgba(67,224,143,.15);color:var(--green)} .tag.c{background:rgba(56,227,214,.12);color:var(--cyan)}
+p{color:var(--muted);margin:8px 0} p b{color:var(--fg)}
+ul,ol{color:var(--muted);margin:8px 0 8px 22px} li{margin:4px 0} li b{color:var(--fg)}
+code{font-family:var(--fm);font-size:13px;color:var(--cyan);background:rgba(56,227,214,.08);padding:1px 6px;border-radius:5px}
+pre{position:relative;background:#04070e;border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:12px 0;overflow:auto}
+pre code{background:none;color:#d7e4ff;padding:0;font-size:13.5px;line-height:1.7;white-space:pre}
+pre .c{color:#66728f} pre .p{color:var(--mag)}
+.copy{position:absolute;top:8px;right:8px;font-family:var(--fm);font-size:11px;color:var(--muted);background:#18213a;border:1px solid var(--line);border-radius:7px;padding:4px 9px;cursor:pointer}
+.copy:hover{color:var(--fg);border-color:var(--vio)} .copy.ok{color:var(--green);border-color:var(--green)}
+.callout{border:1px solid var(--line);border-left-width:3px;border-radius:10px;padding:12px 16px;margin:14px 0;font-size:15px;color:var(--muted)}
+.callout b{color:var(--fg)}
+.callout.gold{border-left-color:var(--amber);background:rgba(255,194,77,.06)}
+.callout.red{border-left-color:var(--red);background:rgba(255,92,114,.06)}
+.callout.green{border-left-color:var(--green);background:rgba(67,224,143,.06)}
+.callout.vio{border-left-color:var(--vio);background:rgba(154,107,255,.06)}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px}
+th{text-align:left;font-family:var(--fm);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);padding:8px 12px;border-bottom:1px solid var(--line)}
+td{padding:10px 12px;border-bottom:1px solid var(--line);color:var(--muted);vertical-align:top} td b{color:var(--fg)}
+.hidden{display:none}
+.src{margin-top:50px;font-size:13px;color:var(--dim)} .src a{color:var(--muted)}
+@media(max-width:860px){.wrap{grid-template-columns:1fr;gap:18px} nav{position:static;max-height:none;border-bottom:1px solid var(--line);padding-bottom:10px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav id="nav">
+  <h4>Secciones</h4>
+  <a href="#universal">0 · Reglas universales</a>
+  <a href="#so">1 · Por sistema operativo</a>
+  <a href="#web">2 · Por servidor web</a>
+  <a href="#contenedores">3 · Contenedores y K8s</a>
+  <a href="#paneles">4 · Hosting y paneles</a>
+  <a href="#eol">5 · PHP sin soporte</a>
+  <a href="#mitigacion">6 · Mitigación temporal</a>
+  <a href="#verificar">7 · Verificación</a>
+  <a href="#intrusion">8 · ¿Ya entraron?</a>
+</nav>
+
+<main>
+<div class="hd">
+  <h1>Guía de parcheo · PHP2Shell</h1>
+  <p class="lead"><b>CVE-2026-109618 y CVE-2026-109619.</b> Cómo actualizar PHP correctamente en cada sistema
+  operativo y con cada servidor web. Versiones corregidas: <b>8.5.12 · 8.4.27 · 8.3.36 · 8.2.35</b>.
+  Datos al 28 de octubre de 2026 — confirma siempre el aviso de tu distribución.</p>
+  <input class="srch" id="q" placeholder="Filtra: ubuntu, nginx, docker, cpanel, fpm, windows…">
+</div>
+
+<!-- 0 -->
+<section id="universal">
+  <h2><span class="n">0</span>Las reglas que aplican a todos</h2>
+  <p>Antes de ir a tu caso, cuatro cosas que valen para cualquier instalación:</p>
+  <ol>
+    <li><b>Actualizar el paquete no basta: hay que reiniciar PHP.</b> Los procesos (workers) que ya estaban corriendo siguen con el código viejo en memoria. Si no reinicias PHP-FPM o Apache, el parche no toma efecto.</li>
+    <li><b>El número de versión engaña.</b> Ubuntu, Debian y Red Hat corrigen <b>sin cambiar</b> el número (backport). Un <code>8.3.6</code> de tu distro puede estar parchado. Valida por el <b>aviso o el changelog del paquete</b>, no por el número.</li>
+    <li><b>Cada contenedor trae su propio PHP.</b> Parchar el host no toca el PHP de adentro. Hay que <b>reconstruir la imagen</b> y volver a desplegar.</li>
+    <li><b>Primero lo expuesto a internet, hoy.</b> Lo interno, esta semana. Con código de prueba público, el margen es de horas.</li>
+  </ol>
+  <p>Identifica tu caso en dos comandos:</p>
+  <pre><code><span class="c"># ¿qué versión y cómo corre PHP?</span>
+<span class="p">$</span> php -v
+<span class="p">$</span> php -i | grep "Server API"     <span class="c"># Apache 2.0 Handler = mod_php · FPM/FastCGI = PHP-FPM · CLI = línea de comandos</span></code></pre>
+  <div class="callout vio">Hay un checker read-only incluido en la charla: <code>python revisar_php.py</code> revisa esta máquina, los contenedores corriendo y (con <code>--imagenes</code>) tus imágenes locales. Úsalo antes y después de parchar.</div>
+</section>
+
+<!-- 1 -->
+<section id="so">
+  <h2><span class="n">1</span>Por sistema operativo</h2>
+  <p>Actualiza con el gestor de paquetes del sistema. Luego pasa a la sección <a href="#web" style="color:var(--cyan)">2</a> para reiniciar el servidor web correcto.</p>
+
+  <h3>Debian · Ubuntu <span class="tag g">apt</span></h3>
+  <pre><code><span class="p">$</span> sudo apt update
+<span class="p">$</span> sudo apt install --only-upgrade 'php*'      <span class="c"># actualiza PHP y sus módulos</span>
+<span class="p">$</span> php -v                                       <span class="c"># confirma la versión corregida o el backport de Ubuntu/Debian</span>
+<span class="p">$</span> sudo systemctl restart php8.3-fpm            <span class="c"># ajusta a tu versión; y/o apache2 si usas mod_php</span></code></pre>
+  <div class="callout gold">¿Usas el PPA de Ondřej Surý para versiones recientes? Asegúrate de que esté al día: <code>sudo add-apt-repository ppa:ondrej/php &amp;&amp; sudo apt update</code>. En Debian, el repo <code>packages.sury.org/php</code>.</div>
+
+  <h3>RHEL · Rocky · AlmaLinux · CentOS Stream <span class="tag g">dnf</span></h3>
+  <pre><code><span class="p">$</span> sudo dnf upgrade 'php*'
+<span class="p">$</span> sudo dnf module update php                   <span class="c"># si instalaste PHP vía módulos (AppStream)</span>
+<span class="p">$</span> php -v
+<span class="p">$</span> sudo systemctl restart php-fpm httpd</code></pre>
+  <div class="callout gold">Si usas el repo <b>Remi</b> para versiones nuevas: <code>sudo dnf module reset php</code> y luego <code>sudo dnf module enable php:remi-8.3</code> antes de actualizar.</div>
+
+  <h3>Fedora <span class="tag g">dnf</span></h3>
+  <pre><code><span class="p">$</span> sudo dnf upgrade 'php*'
+<span class="p">$</span> sudo systemctl restart php-fpm</code></pre>
+
+  <h3>openSUSE · SLES <span class="tag g">zypper</span></h3>
+  <pre><code><span class="p">$</span> sudo zypper refresh
+<span class="p">$</span> sudo zypper update 'php8*'
+<span class="p">$</span> sudo systemctl restart php-fpm</code></pre>
+
+  <h3>Arch · Manjaro <span class="tag g">pacman</span></h3>
+  <pre><code><span class="p">$</span> sudo pacman -Syu php php-fpm
+<span class="p">$</span> sudo systemctl restart php-fpm</code></pre>
+  <div class="callout gold">Arch siempre trae la última versión: un <code>-Syu</code> completo te deja en la rama corregida. No actualices solo PHP (<code>partial upgrade</code>): actualiza todo el sistema.</div>
+
+  <h3>Alpine <span class="tag c">apk</span> <span class="tag a">común en contenedores</span></h3>
+  <pre><code><span class="p">$</span> apk update
+<span class="p">$</span> apk upgrade php82 php82-fpm              <span class="c"># ajusta a php83/php84 según tu versión</span>
+<span class="p">$</span> rc-service php-fpm82 restart            <span class="c"># o, si es contenedor: reconstruye la imagen</span></code></pre>
+
+  <h3>FreeBSD <span class="tag g">pkg</span></h3>
+  <pre><code><span class="p">$</span> sudo pkg update
+<span class="p">$</span> sudo pkg upgrade php83                   <span class="c"># o vía ports: /usr/ports/lang/php83</span>
+<span class="p">$</span> sudo service php-fpm restart</code></pre>
+
+  <h3>macOS <span class="tag c">Homebrew · desarrollo</span></h3>
+  <pre><code><span class="p">$</span> brew update
+<span class="p">$</span> brew upgrade php
+<span class="p">$</span> brew services restart php</code></pre>
+
+  <h3>Windows <span class="tag c">desarrollo · IIS</span></h3>
+  <pre><code><span class="c"># Desarrollo (winget):</span>
+<span class="p">$</span> winget upgrade --id PHP.PHP.8.3 --exact
+
+<span class="c"># Manual / IIS: descarga el build corregido de windows.php.net (mismo hilo: TS o NTS),</span>
+<span class="c"># reemplaza la carpeta de PHP, y recicla el pool de aplicaciones o reinicia IIS:</span>
+<span class="p">$</span> iisreset</code></pre>
+</section>
+
+<!-- 2 -->
+<section id="web">
+  <h2><span class="n">2</span>Por servidor web — qué reiniciar</h2>
+  <p>Actualizar el paquete deja el binario nuevo en disco, pero el proceso que atiende peticiones sigue con el código viejo. Esto es lo que hay que reiniciar según cómo corre PHP:</p>
+  <table>
+    <tr><th>Cómo corre PHP</th><th>Dónde está el PHP que atiende</th><th>Qué reiniciar</th></tr>
+    <tr><td><b>Apache + mod_php</b> <span class="tag r">riesgo más alto</span></td><td>Dentro del proceso de Apache</td><td>Apache completo (restart, no reload)</td></tr>
+    <tr><td><b>Apache + PHP-FPM</b></td><td>En el servicio php-fpm</td><td>php-fpm; recarga Apache</td></tr>
+    <tr><td><b>Nginx + PHP-FPM</b></td><td>En el servicio php-fpm</td><td>php-fpm (Nginx solo hace de proxy)</td></tr>
+    <tr><td><b>LiteSpeed / OpenLiteSpeed</b></td><td>En los procesos lsphp</td><td>El servidor LiteSpeed</td></tr>
+    <tr><td><b>Caddy / FrankenPHP</b></td><td>php-fpm, o PHP embebido</td><td>php-fpm, o actualizar el binario</td></tr>
+    <tr><td><b>IIS + FastCGI</b></td><td>Procesos php-cgi</td><td>Reciclar el pool / iisreset</td></tr>
+  </table>
+
+  <h3>Apache + mod_php <span class="tag r">el ataque ocurre antes de tu app</span></h3>
+  <pre><code><span class="p">$</span> sudo systemctl restart apache2        <span class="c"># Debian/Ubuntu</span>
+<span class="p">$</span> sudo systemctl restart httpd          <span class="c"># RHEL/Rocky/Alma/Fedora</span></code></pre>
+  <div class="callout red"><b>restart, no reload.</b> Un <code>reload</code> no recarga el módulo de PHP ya cargado en memoria: necesitas reiniciar Apache por completo.</div>
+
+  <h3>Apache + PHP-FPM</h3>
+  <pre><code><span class="p">$</span> sudo systemctl restart php8.3-fpm
+<span class="p">$</span> sudo systemctl reload apache2         <span class="c"># Apache solo pasa la petición al pool de FPM</span></code></pre>
+
+  <h3>Nginx + PHP-FPM <span class="tag a">la mayoría de instalaciones modernas</span></h3>
+  <pre><code><span class="p">$</span> sudo systemctl restart php8.3-fpm     <span class="c"># aquí está el PHP que hay que renovar</span>
+<span class="p">$</span> sudo systemctl reload nginx           <span class="c"># opcional; Nginx no ejecuta PHP, solo lo proxya</span></code></pre>
+  <div class="callout gold">Reiniciar <b>solo Nginx no arregla nada</b>: el PHP vive en php-fpm. El paso que importa es <code>restart php-fpm</code>.</div>
+
+  <h3>LiteSpeed · OpenLiteSpeed <span class="tag a">lsphp</span></h3>
+  <pre><code><span class="p">$</span> sudo apt install --only-upgrade lsphp83*   <span class="c"># o el gestor de tu panel</span>
+<span class="p">$</span> sudo systemctl restart lsws                 <span class="c"># o: /usr/local/lsws/bin/lswsctrl restart</span></code></pre>
+
+  <h3>Caddy <span class="tag c">php_fastcgi</span></h3>
+  <pre><code><span class="p">$</span> sudo systemctl restart php8.3-fpm     <span class="c"># Caddy proxya a FPM; el fix va en FPM</span></code></pre>
+
+  <h3>FrankenPHP <span class="tag a">PHP embebido en el binario</span></h3>
+  <pre><code><span class="c"># FrankenPHP trae PHP DENTRO del binario: reiniciar el servicio no basta.</span>
+<span class="c"># Actualiza el binario o la imagen y vuelve a desplegar:</span>
+<span class="p">$</span> docker pull dunglas/frankenphp:latest
+<span class="p">$</span> docker compose up -d --force-recreate</code></pre>
+
+  <h3>IIS + FastCGI <span class="tag c">Windows</span></h3>
+  <pre><code><span class="c"># Reemplaza los binarios de PHP (ver sección 1 · Windows), luego:</span>
+<span class="p">$</span> iisreset                              <span class="c"># o recicla solo el Application Pool del sitio</span></code></pre>
+</section>
+
+<!-- 3 -->
+<section id="contenedores">
+  <h2><span class="n">3</span>Contenedores y orquestación</h2>
+  <p>No se parcha un contenedor en caliente: se <b>reconstruye</b> con la imagen base corregida y se vuelve a desplegar.</p>
+
+  <h3>Docker · Docker Compose</h3>
+  <pre><code><span class="c"># 1) En tu Dockerfile, fija una base corregida:  FROM php:8.3-apache  (o 8.3.36-apache)</span>
+<span class="p">$</span> docker compose build --pull           <span class="c"># --pull trae la última base, no la cacheada</span>
+<span class="p">$</span> docker compose up -d                   <span class="c"># redepliega</span>
+
+<span class="c"># Imagen oficial directa, sin Dockerfile propio:</span>
+<span class="p">$</span> docker pull php:8.3-fpm
+<span class="p">$</span> docker compose up -d --force-recreate</code></pre>
+  <div class="callout gold">Revisa también imágenes <b>guardadas y sin usar</b>: una base vieja volverá si alguien la vuelve a desplegar. <code>docker images</code> y reconstruye o borra las obsoletas.</div>
+
+  <h3>Kubernetes</h3>
+  <pre><code><span class="p">$</span> kubectl set image deploy/mi-app php=mi-registro/mi-app:php8.3.36
+<span class="p">$</span> kubectl rollout restart deploy/mi-app
+<span class="p">$</span> kubectl rollout status  deploy/mi-app   <span class="c"># espera a que termine el despliegue</span></code></pre>
+
+  <h3>Escaneo de imágenes</h3>
+  <pre><code><span class="p">$</span> trivy image mi-app:latest              <span class="c"># Aqua Trivy</span>
+<span class="p">$</span> docker scout cves mi-app:latest        <span class="c"># Docker Scout</span>
+<span class="p">$</span> grype mi-app:latest                    <span class="c"># Anchore Grype</span></code></pre>
+</section>
+
+<!-- 4 -->
+<section id="paneles">
+  <h2><span class="n">4</span>Hosting administrado y paneles</h2>
+
+  <h3>cPanel · WHM</h3>
+  <p>En WHM: <b>EasyApache 4</b> para actualizar los paquetes de PHP, o <b>MultiPHP Manager</b> para asignar una versión soportada por dominio.</p>
+  <pre><code><span class="p">$</span> sudo yum update ea-php83*              <span class="c"># actualiza los paquetes ea-php de cPanel</span>
+<span class="p">$</span> sudo /scripts/restartsrv_httpd         <span class="c"># reinicia el servicio web de cPanel</span></code></pre>
+
+  <h3>Plesk</h3>
+  <p>Tools &amp; Settings → <b>Updates</b> para traer los paquetes corregidos; en <b>PHP Settings</b> asigna una versión soportada por dominio.</p>
+  <pre><code><span class="p">$</span> sudo plesk installer update            <span class="c"># o el autoinstaller interactivo</span></code></pre>
+
+  <h3>Hosting compartido</h3>
+  <p>El PHP lo administra el proveedor. En tu panel, elige una <b>rama soportada (8.2+)</b> y pregunta por escrito si ya aplicaron el parche. Si no responden pronto, considera mover el sitio.</p>
+
+  <h3>Cloud gestionado</h3>
+  <ul>
+    <li><b>Azure App Service / AWS Elastic Beanstalk:</b> espera (o fuerza) la plataforma actualizada y redepliega la app.</li>
+    <li><b>Cloud Run / Lambda / contenedores serverless:</b> reconstruye la imagen con la base corregida y vuelve a desplegar — igual que cualquier contenedor.</li>
+  </ul>
+</section>
+
+<!-- 5 -->
+<section id="eol">
+  <h2><span class="n">5</span>PHP sin soporte: 7.4 · 8.0 · 8.1 <span class="tag r">sin parches oficiales</span></h2>
+  <p>Estas ramas ya no reciben versiones nuevas. Hay tres caminos, en orden de preferencia:</p>
+  <ol>
+    <li><b>Migra a 8.2+</b> — es la única solución real y sostenible.</li>
+    <li><b>Parche de tu distribución o de soporte extendido (ELS):</b> Ubuntu Pro, TuxCare y otros publican backports para versiones viejas. Pregúntales y valida por changelog.</li>
+    <li><b>Backport en código fuente:</b> PHP publicó parches mínimos para 7.4/8.0/8.1, pero solo sirven si <b>compilas tu propio PHP</b>. No cuentes con eso para producción.</li>
+  </ol>
+  <pre><code><span class="c"># ¿mi distro ya aplicó el backport? busca las CVE en el changelog del paquete</span>
+<span class="p">$</span> apt changelog php8.1 | grep -E "CVE-2026-10961[89]"        <span class="c"># Ubuntu/Debian</span>
+<span class="p">$</span> rpm -q --changelog php | grep -E "CVE-2026-10961[89]"      <span class="c"># RHEL/Rocky/Alma</span></code></pre>
+</section>
+
+<!-- 6 -->
+<section id="mitigacion">
+  <h2><span class="n">6</span>Si hoy no puedes parchar: mitigación temporal</h2>
+  <div class="callout red">Esto <b>no sustituye el parche</b>. Cierra caminos de la <b>109619</b> (y la 115560). Para la <b>109618 no hay mitigación confiable</b>: solo actualizar. Es para ganar horas.</div>
+  <pre><code><span class="c"># php.ini, o un .ini del pool de PHP-FPM (NO ini_set() ni .user.ini)</span>
+session.upload_progress.enabled = 0
+fatal_error_backtraces = 0             <span class="c"># solo tiene efecto en PHP 8.5</span>
+
+<span class="c"># y reinicia TODOS los workers</span>
+<span class="p">$</span> sudo systemctl restart php8.3-fpm     <span class="c"># o apache2 / httpd según tu caso</span></code></pre>
+  <ul>
+    <li><b>No sirve:</b> ocultar errores con <code>display_errors</code> o <code>error_reporting</code>.</li>
+    <li><b>Dónde va:</b> en <code>php.ini</code> o en el pool de FPM. <code>ini_set()</code> y <code>.user.ini</code> no la aplican a tiempo.</li>
+    <li><b>Si ni eso puedes hoy:</b> saca el sitio de internet mientras parchas. El FBI recomendó desconectar lo que no se pudiera actualizar de inmediato.</li>
+  </ul>
+</section>
+
+<!-- 7 -->
+<section id="verificar">
+  <h2><span class="n">7</span>Verificación — ¿de verdad quedó?</h2>
+  <ol>
+    <li><b>Versión:</b> <code>php -v</code> y, si usas FPM, <code>php-fpm8.3 -v</code> (el binario de FPM es el que atiende).</li>
+    <li><b>Si viene de tu distro:</b> confirma por el aviso o el changelog, no por el número (puede estar parchado sin cambiarlo).</li>
+    <li><b>Workers reiniciados:</b> que no queden procesos viejos.</li>
+    <li><b>Re-escaneo:</b> <code>python revisar_php.py</code> (y <code>--imagenes</code> para tus imágenes Docker).</li>
+  </ol>
+  <pre><code><span class="c"># ¿quedaron workers con el código viejo? mira cuándo arrancaron</span>
+<span class="p">$</span> ps -eo pid,lstart,cmd | grep -E 'php-fpm|apache2|httpd' | grep -v grep
+<span class="c"># la hora de arranque debe ser POSTERIOR a tu reinicio</span></code></pre>
+</section>
+
+<!-- 8 -->
+<section id="intrusion">
+  <h2><span class="n">8</span>¿Y si ya entraron antes de que parcharas?</h2>
+  <p>Parchar detiene el acceso futuro, pero no deshace una intrusión previa. Si había PHP vulnerable expuesto, revisa:</p>
+  <pre><code><span class="p">$</span> ps -eo user,pid,lstart,cmd | grep -E '^(www-data|apache|nginx)'   <span class="c"># procesos del usuario de PHP</span>
+<span class="p">$</span> ss -tnp | grep -i php                                             <span class="c"># conexiones de PHP ahora mismo</span>
+<span class="p">$</span> find /tmp /var/tmp -newer /etc/hostname -type f                   <span class="c"># archivos recientes en temporales</span></code></pre>
+  <p>Señales (Sophos): conexiones de PHP que duran de más, procesos con nombres raros o corriendo desde <code>/tmp</code>, tráfico de IPs de mala reputación, errores fatales y reinicios de workers que antes no había. CISA publicó una regla SIGMA para detectar intentos.</p>
+  <div class="callout red">Si encuentras indicios: <b>aísla el servidor, conserva los logs, rota credenciales</b> (base de datos, llaves, tokens) y, en la duda, <b>reconstruye</b> desde una imagen limpia. Parchar no basta.</div>
+</section>
+
+<p class="src">Fuentes:
+<a href="https://cyber.gc.ca/en/alerts-advisories/al26-026-critical-vulnerabilities-impacting-php-cve-2026-109618-cve-2026-109619">Centro Canadiense de Ciberseguridad, AL26-026</a> ·
+<a href="https://securitylabs.datadoghq.com/articles/php2shell-critical-vulnerabilities-in-php/">Datadog Security Labs</a> ·
+<a href="https://ubuntu.com/blog/php2shell-vulnerability-fixes-available">Ubuntu</a> ·
+<a href="https://www.huntress.com/blog/php2shell-leaked-critical-php-vulnerabilities">Huntress</a> ·
+<a href="https://www.sophos.com/blog/proof-of-concept-exploit-released-for-php-vulnerabilities-109618-109619">Sophos</a> ·
+<a href="https://www.bleepingcomputer.com/news/security/php-ships-emergency-patches-for-critical-php2shell-flaws">BleepingComputer</a>.
+Valida siempre contra el aviso oficial de tu distribución el día que parches.</p>
+</main>
+</div>
+
+<script>
+// copiar bloques de código
+document.querySelectorAll('pre').forEach(pre=>{
+  const b=document.createElement('button'); b.className='copy'; b.textContent='copiar';
+  b.onclick=()=>{const t=pre.querySelector('code').innerText.replace(/^\$ /gm,'');
+    navigator.clipboard.writeText(t).then(()=>{b.textContent='copiado';b.classList.add('ok');
+      setTimeout(()=>{b.textContent='copiar';b.classList.remove('ok')},1200);});};
+  pre.appendChild(b);
+});
+// filtro
+const q=document.getElementById('q'), secs=[...document.querySelectorAll('section')];
+const norm=s=>s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+q.addEventListener('input',()=>{const t=norm(q.value);
+  secs.forEach(s=>s.classList.toggle('hidden', t && !norm(s.textContent).includes(t)));});
+// resaltar sección activa en el nav
+const links=[...document.querySelectorAll('nav a')];
+const byId=id=>links.find(a=>a.getAttribute('href')==='#'+id);
+new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){
+  links.forEach(a=>a.classList.remove('on')); const l=byId(e.target.id); if(l)l.classList.add('on');}});},
+  {rootMargin:'-20% 0px -70% 0px'}).observe&&secs.forEach(s=>{
+  new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){
+    links.forEach(a=>a.classList.remove('on')); const l=byId(e.target.id); if(l)l.classList.add('on');}});},
+    {rootMargin:'-20% 0px -70% 0px'}).observe(s);});
+</script>
+</body>
+</html>

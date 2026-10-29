@@ -1,0 +1,25 @@
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editores
+.vscode/
+.idea/
+*.swp
+
+# Python
+__pycache__/
+*.pyc
+
+# Privado de la charla: NO publicar (al repo solo van demos y guía de parcheo)
+slides.html
+guion.html
+preguntas.html
+MONTAJE.md
+1-deck.bat
+2-preguntas.bat
+3-guion.bat
+7-guion-en-celular.bat
+assets/
+guion-php2shell-notas.*

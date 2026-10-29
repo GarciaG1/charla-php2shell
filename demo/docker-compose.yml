@@ -1,0 +1,19 @@
+# Demo PHP2Shell — un "sitio" real corriendo sobre PHP vulnerable, a propósito.
+# No contiene ningún exploit: solo sirve una página y nos deja ver versión y config.
+#
+#   docker compose up -d        # levanta el sitio vulnerable (PHP 8.2.30)
+#   abre http://localhost:8080  # se ve un sitio normal
+#
+# El archivo de mitigación está comentado: lo activas EN VIVO en el paso 2 (ver DEMO.md).
+
+services:
+  web:
+    image: php:8.2.30-apache          # PHP viejo y vulnerable, elegido a propósito
+    container_name: php2shell-demo
+    ports:
+      - "8080:80"
+    volumes:
+      - ./www:/var/www/html:ro
+      # PASO 2 (mitigación) — descomenta esta línea y haz `docker compose up -d` de nuevo:
+      # - ./mitigacion/php2shell.ini:/usr/local/etc/php/conf.d/zz-php2shell.ini:ro
+    restart: unless-stopped
