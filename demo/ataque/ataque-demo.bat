@@ -11,7 +11,7 @@ cls
 echo.
 echo   ATAQUE ETICO CONTROLADO  -  Que es "ejecucion remota de codigo"
 echo   ================================================================
-echo   Todo corre en TU laptop, en un contenedor aislado, contra una app
+echo   Todo corre en una maquina local, en un contenedor aislado, contra una app
 echo   de juguete vulnerable a proposito. NO es el exploit de PHP2Shell.
 echo.
 docker rm -f %NAME% >nul 2>&1
@@ -29,7 +29,7 @@ echo.
 echo   $ curl "http://localhost:8081/diagnostico.php?host=localhost"
 curl -s "http://localhost:8081/diagnostico.php?host=localhost"
 echo.
-echo   ^>^> Se ve inofensivo: le das un host y lo "diagnostica".
+echo   ^>^> Se ve inofensivo: recibe un host y lo "diagnostica".
 echo.
 pause
 
@@ -41,7 +41,7 @@ echo.
 echo   $ curl "http://localhost:8081/diagnostico.php?host=localhost;id"
 curl -s "http://localhost:8081/diagnostico.php?host=localhost;id"
 echo.
-echo   ^>^> Una sola peticion web, y ya corro comandos como el usuario del servidor.
+echo   ^>^> Una sola peticion web ejecuta comandos como el usuario del servidor.
 echo.
 pause
 

@@ -33,7 +33,7 @@ echo.
 echo   $ python ..\revisar_php.py
 python ..\revisar_php.py
 echo.
-echo   ^>^> Mi laptop esta al dia, pero el contenedor dice VULNERABLE.
+echo   ^>^> La maquina esta al dia, pero el contenedor dice VULNERABLE.
 echo.
 pause
 
@@ -48,7 +48,7 @@ echo   $ docker exec %NAME% php -i ^| findstr session.upload_progress.enabled
 docker exec %NAME% php -i | findstr /i upload_progress.enabled
 echo.
 echo   Refresca http://localhost:8080  -^>  ahora dice OFF (mitigado)
-echo   ^>^> Pero la version sigue siendo vieja. Es un curita, no la cura.
+echo   ^>^> La version sigue siendo vieja: es paliativo, no la cura.
 echo.
 pause
 
@@ -65,7 +65,7 @@ echo.
 echo   $ docker exec %NAME% php -v
 docker exec %NAME% php -v
 echo.
-echo   ^>^> No parche el host: reconstrui el contenedor. Cada imagen trae su propio PHP.
+echo   ^>^> No se parcha el host: se reconstruye el contenedor. Cada imagen trae su propio PHP.
 echo.
 pause
 
@@ -77,7 +77,7 @@ echo.
 echo   $ python ..\revisar_php.py
 python ..\revisar_php.py
 echo.
-echo   ^>^> El contenedor ahora dice CORREGIDO. Esa es toda la historia en 4 comandos.
+echo   ^>^> El contenedor ahora dice CORREGIDO.
 echo.
 pause
 
